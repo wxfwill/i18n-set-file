@@ -1,0 +1,39 @@
+{
+  "name": "i18n-set-file",
+  "version": "1.0.4",
+  "description": "",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    }
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "rm -rf ./dist && rollup -c",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [],
+  "author": "will",
+  "license": "ISC",
+  "dependencies": {
+    "@rollup/plugin-commonjs": "21.0.0",
+    "@rollup/plugin-node-resolve": "16.0.1",
+    "abort-controller": "3.0.0",
+    "fs-extra": "9.1.0",
+    "node-fetch": "2.7.0",
+    "rollup": "2.79.2",
+    "rollup-plugin-copy": "3.5.0"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "devDependencies": {}
+}
