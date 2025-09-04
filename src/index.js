@@ -27,17 +27,22 @@ export async function getResource(options = {}) {
 
 
     // Node 12+ ESM: 动态引入 Node-only 依赖
-    let resolve, dirname, fileURLToPath, fs, getLanguagesInfo, __filename, __dirname;
+    let __filename_;
+    if (typeof require !== 'undefined') {
+        __filename_ = __filename
+    }
+    let resolve, dirname, fileURLToPath, fs, getLanguagesInfo, __filename__, __dirname, consola;
     try {
         // 动态 import
         ({ resolve, dirname } = await import('path'));
         ({ fileURLToPath } = await import('url'));
         fs = (await import('fs-extra')).default;
         ({ getLanguagesInfo } = await import('./fetch.js'));
+        consola = (await import('consola')).default;
 
         // 兼容 Node 12.17+ ESM
-        __filename = fileURLToPath(import.meta.url);
-        __dirname = dirname(__filename);
+        __filename__ = fileURLToPath(import.meta.url);
+        __dirname = dirname(__filename__);
     } catch (e) {
         // 兼容 Node 12.0-12.16 或 CJS 环境
         // eslint-disable-next-line
@@ -48,9 +53,10 @@ export async function getResource(options = {}) {
         getLanguagesInfo = require('./fetch.js').getLanguagesInfo;
 
         // 在CJS环境中，确保路径是绝对的
-        __filename = ensureAbsolutePath(__filename || process.argv[1]);
+        __filename = ensureAbsolutePath(__filename_ || process.argv[1]);
         console.log('__filename: ', __filename);
         __dirname = path.dirname(__filename);
+        console.log('__dirname: ', __dirname);
         resolve = path.resolve;
     }
 
@@ -77,5 +83,5 @@ export async function getResource(options = {}) {
         await fs.ensureFile(langFileResultPath);
         await fs.outputFile(langFileResultPath, fileContent);
     }
-    console.log('mock.js 文件写入成功！');
+    consola.success(`i18n 资源文件已生成，路径为：${resultPath}`);
 }

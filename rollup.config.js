@@ -2,6 +2,7 @@ import { defineConfig } from 'rollup';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
+import { terser } from 'rollup-plugin-terser';
 
 export default defineConfig([
     // ESM 构建
@@ -30,6 +31,11 @@ export default defineConfig([
                 targets: [
                     { src: 'src/mock.json', dest: 'dist/esm' },
                 ]
+            }),
+            terser({
+                compress: {
+                    drop_console: true,
+                }
             })
         ]
     },
@@ -42,7 +48,7 @@ export default defineConfig([
             format: 'cjs',
             exports: 'named',
             chunkFileNames: '[name].js', // 使用原始的模块名称，避免添加哈希
-             manualChunks: undefined
+            manualChunks: undefined
             //   sourcemap: true,
         },
         external: [
@@ -59,6 +65,11 @@ export default defineConfig([
                 targets: [
                     { src: 'src/mock.json', dest: 'dist/cjs' },
                 ]
+            }),
+            terser({
+                compress: {
+                    drop_console: true,
+                }
             })
         ]
     }
